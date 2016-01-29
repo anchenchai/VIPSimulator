@@ -64,7 +64,7 @@ public class VIPServer extends Process {
 
 	public static SE getSEbyName(String seName) {
 		for (SE se : seList)
-			if (se.getName().matches(seName))
+			if (se.getName().compareToIgnoreCase(seName)==0)
 				return se;
 		// Some worker may define a close SE that was never used, hence that
 		// exists neither in the platform nor the deployment files. In that case
