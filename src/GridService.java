@@ -6,11 +6,13 @@
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the license (GNU LGPL) which comes with this package.
  */
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.simgrid.msg.Host;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.Msg;
+import org.simgrid.msg.Mutex;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.Task;
 
@@ -22,6 +24,21 @@ public abstract class GridService extends Process {
 	// hostName: the name of the host that runs the service
 	// catalog: a vector of logical files
 	protected Vector<LogicalFile> catalog;
+	
+	// A (SE_file, int) Hashmap to indicate whether the desired file exist in a SE
+	// For example:	(SE1_file, 0) means file is replicating to SE1 in progress
+	//				(SE1_file, 1) means file exists in SE1
+	//              (SE1_file, 2) means failure to copy file in SE1 during execution
+	public HashMap<String, Integer> replicas_info = new HashMap<String,Integer>();
+	
+	// Mutex to modify the status in HashMap replicas_info
+	public HashMap<String, Mutex> transfer_locks = new HashMap<String, Mutex>();
+	
+	
+	// Global mutex for GridService to prevent several jobs 
+	// to modify transfer_locks or replicas_info at same time  
+	public Mutex grid_mutex = new Mutex();
+	
 	
 	protected String findAvailableMailbox(long retryAfter) {
 		while (true) {

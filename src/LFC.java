@@ -11,11 +11,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.Host;
 import org.simgrid.msg.Process;
 import org.simgrid.msg.MsgException;
+import org.simgrid.msg.Mutex;
 
 public class LFC extends GridService {
 	// A simulation can begin with some logical files referenced in the LFC.
@@ -25,7 +27,6 @@ public class LFC extends GridService {
 	// The populate function reads and parses that file, create LogicalFile objects and add them to the local catalog.
 	private void populate(String csvFile) {
 		Msg.info("Population of LFC '" + name + "' from '" + csvFile + "'");
-
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(csvFile));
 			String line = "";
@@ -62,7 +63,6 @@ public class LFC extends GridService {
 			e.printStackTrace();
 		}
 	}
-
 	// A worker might want to register a new logical file, or a replica on an existing file in the catalog. This 
 	// function first checks if a file with the same name already exists. If it does, it determines whether it is a
 	// new replica or not. Otherwise, it creates a new entry in the catalog for that file.
@@ -103,7 +103,7 @@ public class LFC extends GridService {
 		LFCMessage.sendTo(mailbox, "REGISTER_ACK", null, null);
 		Msg.debug("'LFC@" + getName() + "' sent an ACK on '" + mailbox + "'");
 	}
-
+	
 	private void sendLogicalFile(String mailbox, LogicalFile file) {
 		Vector<LogicalFile> list = new Vector<LogicalFile>();
 		list.add(file);
@@ -114,6 +114,12 @@ public class LFC extends GridService {
 	private void sendLogicalFileList(String mailbox, Vector<LogicalFile> list) {
 		LFCMessage.sendTo(mailbox, "SEND_LOGICAL_FILE", null, list);
 	}
+	
+	private void sendReplicaInfo(String mailbox, String se_file, int info) {
+		LFCMessage.sendTo(mailbox, "SEND_LOGICAL_FILE", null, info);
+		Msg.debug("'LFC@" + name + "' sent info of " + se_file +":" + info  +" back on '" + mailbox + "'");
+	}
+	
 	public LFC(Host host, String name, String[] args) {
 		super(host, name, args);
 		this.catalog = new Vector<LogicalFile>();
@@ -123,17 +129,20 @@ public class LFC extends GridService {
 
 	public void main(String[] args) throws MsgException {
 		// If this LFC process is started with an argument, we populate the catalog from the CSV file given as args[0]
-		String csvFile = (args.length > 0 ? args[0] : null);
-
-		if ((VIPSimulator.version != 1) && (csvFile != null)) {
-			populate(csvFile);
-			Msg.debug(this.toString());
-		} else {
+		String csvFile = null;
+		if(VIPSimulator.version ==1){
 			LogicalFile file = new LogicalFile("input.tgz", VIPSimulator.fixedFileSize, VIPServer.getDefaultSE());
 			Msg.info("Importing file '" + file.toString());
 			catalog.add(file);
 		}
-
+		if(VIPSimulator.version == 3)
+			csvFile= (args.length > 0 ? args[0] : null);
+		if(VIPSimulator.version == 2) 
+			csvFile= VIPSimulator.Lfc;
+		if(csvFile != null) {
+			Msg.info(csvFile);
+			populate(csvFile);
+		}
 		for (int i = 0; i < 500; i++) {
 			mailboxes.add(new Process(name, name + "_" + i) {
 				public void main(String[] args) throws MsgException {
@@ -151,7 +160,7 @@ public class LFC extends GridService {
 							sendAckTo("return-" + mailbox);
 							break;
 						case "ASK_LOGICAL_FILE":
-							LogicalFile file = getReplicaByName(message.getFileName());
+							LogicalFile file = getLogicalFileByName(message.getFileName());
 							// Send this file back to the sender
 							sendLogicalFile("return-" + mailbox, file);
 							break;
@@ -166,6 +175,52 @@ public class LFC extends GridService {
 						case "ASK_LR":	
 							LogicalFile fileLr = getLogicalFileByName(message.getFileName());
 							sendLogicalFile("return-" + mailbox, fileLr);
+							break;
+							
+						case "ASK_RI":	
+							String SE_File = message.getFileName();
+							transfer_locks.get(SE_File).acquire();
+							int info = replicas_info.get(SE_File);
+							transfer_locks.get(SE_File).release();
+							sendReplicaInfo("return-" + mailbox, SE_File, info);
+							break;
+						
+						case "Modify_RI":
+							String m_replica_info = message.getFileName();
+							int status_new = message.getReplicas_info();
+							transfer_locks.get(m_replica_info).acquire();
+							replicas_info.put(m_replica_info, status_new);
+							transfer_locks.get(m_replica_info).release();;
+							sendAckTo("return-" + mailbox);	
+							break;
+							
+						case "ASK_Transfer_Lock":
+							String transfer_lock = message.getFileName();
+							boolean flag = transfer_locks.containsKey(transfer_lock);
+							// if lock for copy file into SE exists, return 1; otherwise 0.
+							if(flag) sendReplicaInfo("return-" + mailbox, transfer_lock, 1); 
+							else 	 sendReplicaInfo("return-" + mailbox, transfer_lock, 0);
+							break;
+							
+						case "CREATE_Transfer_Lock":
+							String new_transfer_lock = message.getFileName();
+							boolean flag_lock;
+							// This mutex ensures that only one gate job creates transfer lock
+							// because several gate jobs may start at same time
+							grid_mutex.acquire();  
+							flag_lock =  transfer_locks.containsKey(new_transfer_lock);
+							if(!flag_lock){
+								Msg.debug("first job, create lock for replicating file into closeSE");
+								transfer_locks.put(new_transfer_lock, new Mutex());	
+								replicas_info.put(new_transfer_lock, 0);
+							}
+							grid_mutex.release();
+							// If the job creates lock, return 0; otherwise return 1;				
+							if(!flag_lock) sendReplicaInfo("return-" + mailbox, new_transfer_lock, 0); 
+							else sendReplicaInfo("return-" + mailbox, new_transfer_lock, 1); 
+							
+							break;
+							
 						default:
 							break;
 						}
@@ -209,6 +264,39 @@ public class LFC extends GridService {
 		return m.getFile().getLocations();
 	}
 
+	public int getReplicaInfo(String SE_File){
+		String mailbox = this.findAvailableMailbox(100);
+		LFCMessage.sendTo(mailbox, "ASK_RI", SE_File, null);
+		Msg.info("Asked replicas info of '" + SE_File + "'. Waiting for reply ...");
+		LFCMessage m = (LFCMessage) Message.getFrom("return-" + mailbox);
+		return m.getReplicas_info();
+	}
+	
+
+	public void modifyReplicaInfo(String SE_File, int info){
+		String mailbox = this.findAvailableMailbox(100);
+		LFCMessage.sendTo(mailbox, "Modify_RI", SE_File, info);
+		Msg.info("Change replicas info of '" + SE_File + "' to "+ info);
+		Message.getFrom("return-" + mailbox);
+	}
+	
+	
+	public int getTransferLock(String SE_File){
+		String mailbox = this.findAvailableMailbox(100);
+		LFCMessage.sendTo(mailbox, "ASK_Transfer_Lock", SE_File, null);
+		Msg.info("Asked whether transfer lock for '" + SE_File + "' exists. Waiting for reply ...");
+		LFCMessage m = (LFCMessage) Message.getFrom("return-" + mailbox);
+		return m.getReplicas_info();
+	}
+	
+	public int createTransferLock(String SE_File){
+		String mailbox = this.findAvailableMailbox(100);
+		LFCMessage.sendTo(mailbox, "CREATE_Transfer_Lock", SE_File, null);
+		Msg.info("Create transfer lock for '" + SE_File + "'. Waiting for reply ...");
+		LFCMessage m = (LFCMessage) Message.getFrom("return-" + mailbox);
+		return m.getReplicas_info();
+	}
+	
 	public String toString() {
 		return catalog.toString();
 	}
@@ -218,7 +306,11 @@ public class LFC extends GridService {
 	//   2. SURLs from local domain
 	//   3. Others
 	public void fillsurls(GfalFile gf){
-		
+		int size;
+		int next_defaultse = 0, next_local = 0, next_others = 0;
+		Random randomGenerator = new Random();
+		int randomInt;
+		SE tmp1, tmp2;
 		@SuppressWarnings("unchecked")
 		Vector<SE> fileReplicas = (Vector<SE>) gf.GetLogicalFile().getLocations().clone();
 		Job job = (Job) getCurrentProcess();
@@ -226,34 +318,75 @@ public class LFC extends GridService {
 		SE CloseSE = job.getCloseSE();
 		String HostName = JobName.split("\\.")[0];
 		String DomainName = JobName.substring(HostName.length()+1, JobName.length());
+		String[] tmp = JobName.split("\\.");
+		String Country = tmp[tmp.length-1];
 		Msg.info("Construct sorted list of replicas for "+ job.getName());
 		
-		// firstly add CloseSE if there exists
-		if(fileReplicas.contains(CloseSE)){
-			gf.replicas.addElement(CloseSE);
-			fileReplicas.remove(CloseSE);
-		}
-		// add replicas with same domain name
-		for(SE se:gf.GetLogicalFile().getLocations()){
-			if(se.getName().contains(DomainName)){
-				gf.replicas.addElement(se);
-				fileReplicas.remove(se);
-			}
-		}
-		// For the rest, add randomly in the list
-		int NbReplicasLeft = fileReplicas.size();
-		int randomInt;
-		for(int i=0; i < NbReplicasLeft; i++){
-			Random randomGenerator = new Random();
-			randomInt = randomGenerator.nextInt(NbReplicasLeft -i);
-			gf.replicas.addElement(fileReplicas.get(randomInt));
+		size = gf.GetLogicalFile().getLocations().size();
+		for(SE se: fileReplicas){
 			
-			fileReplicas.remove(randomInt);
-		}	
+			String SeName = se.getName();
+			String SeHostName = SeName.split("\\.")[0];
+			String SeDomainName = SeName.substring(SeHostName.length()+1, SeName.length());
+			String[] t = SeName.split("\\.");
+			String SeCountry = t[t.length-1];
+			
+			if(se.equals(CloseSE)){	
+				
+				tmp1 = gf.replicas.get(next_defaultse);
+				tmp2 = gf.replicas.get(next_local);
+				gf.replicas.set(next_defaultse, se);
+				
+				if(next_local > next_defaultse && tmp1 != null && next_local < size)
+					gf.replicas.set(next_local, tmp1);
+				if(next_others > next_local && tmp2 != null && next_others < size)
+					gf.replicas.set(next_others, tmp2);
+				
+				
+				++next_defaultse;
+				++next_local;
+				++next_others;
+				continue;
+			}
+			if(Country.equals(SeCountry)){
+				randomGenerator.setSeed((long) System.currentTimeMillis()+getPID());
+//				randomInt = ThreadLocalRandom.current().nextInt(next_local - next_defaultse + 1) + next_defaultse;
+				randomInt = randomGenerator.nextInt(next_local - next_defaultse + 1) + next_defaultse;
+				tmp1 = gf.replicas.get(randomInt);
+				tmp2 = gf.replicas.get(next_local);
+				gf.replicas.set(randomInt, se);
+				if(next_local > randomInt && tmp1 != null && next_local < size)
+					gf.replicas.set(next_local, tmp1);
+				if(next_others > next_local && tmp2 != null && next_others < size)
+					gf.replicas.set(next_others, tmp2);
+				
+				++next_local;
+				++next_others;
+				continue;
+			}
+			randomGenerator.setSeed((long) System.currentTimeMillis()+getPID());
+//			randomInt = ThreadLocalRandom.current().nextInt(next_others - next_local + 1) + next_local;
+			randomInt = randomGenerator.nextInt(next_others - next_local + 1) + next_local;
+			Msg.debug("next_others:"+next_others + "  next_local: "+next_local+"  randomInt:"+ randomInt);
+			tmp1 = gf.replicas.get(randomInt);
+			gf.replicas.set(randomInt, se);
+			Msg.debug("set: "+ randomInt+" in gf.replicas\n");
+			
+			if(tmp1 != null && next_others < size ){
+				gf.replicas.set(next_others, tmp1);
+				Msg.debug("set1: "+ next_others+"\n");
+			}
+			++next_others;
+		}
 		
-		if(fileReplicas.size()>0 || gf.replicas.size() != gf.getNbreplicas()) 
-			Msg.info("Something went wrong, when constructing the sorted replicas vector of " 
-					 + gf.GetLogicalFile().getName()+" for Job"+JobName);
+		if(gf.replicas.contains(null)){ 
+			Msg.debug("Something went wrong, when constructing the sorted replicas vector of " 
+					 + gf.GetLogicalFile().getName()+" for Job "+JobName);
+			for(int i=0; i < gf.replicas.size(); i++){
+				if(gf.replicas.get(i) == null) Msg.debug("Index "+ i + " in gf.replicas is null ");
+			}
+
+		}
 
 	}
 	

@@ -46,6 +46,18 @@ public class SE extends GridService {
 		}
 	}
 	
+	// Dynamic replicas might be created during execution
+	// If a new replicas is created, need to add in catalog of SE 
+	public void addToCatalog(LogicalFile newFile) {
+		Msg.debug("Inserting '" + newFile.toString() + "'into the SE " + name);
+		if (!catalog.contains((Object) newFile)) {
+			// This file is not registered yet, create and add it
+			Msg.debug("'" + newFile.getName() + "' is not registered yet");
+			catalog.add(newFile);
+		} 
+		Msg.info("SE '" + name + "' registered " + newFile.toString());
+	}
+	
 	private void sendAckTo(String mailbox) {
 		SEMessage.sendTo(mailbox, "UPLOAD_ACK", "");
 		Msg.debug("'SE@" + getName() + "' sent an ACK on '" + mailbox + "'");
@@ -65,8 +77,13 @@ public class SE extends GridService {
 	}
 
 	public void main(String[] args) throws MsgException {
-		String csvFile = (args.length > 0 ? args[0] : null);
+		String csvFile = null;
+		if(VIPSimulator.version != 2)
+			csvFile= (args.length > 0 ? args[0] : null);
+		if(VIPSimulator.version == 2) 
+			csvFile= VIPSimulator.Lfc;
 		if(csvFile != null) {
+			Msg.info(csvFile);
 			populate(csvFile);
 			Msg.debug(this.toString());
 		}
@@ -81,6 +98,7 @@ public class SE extends GridService {
 						SEMessage message = (SEMessage) Message.getFrom(mailbox);
 
 						switch (message.getType()) {
+						
 						case "DOWNLOAD_REQUEST":
 							// A worker asked for a physical file. A data transfer of getSize() bytes occurs upon reply.
 							// TODO This will have to be replaced/completed by some I/O operations at some point to
@@ -89,6 +107,7 @@ public class SE extends GridService {
 							long size = getLogicalFileByName(fileName).getSize();			
 							Msg.debug("SE '" + name + "' send file '" + fileName + "' of size " + size + " to '"
 									+ ((Job) message.getSender()).getName() + "'");
+
 							sendFileTo("return-" + mailbox, size);
 							break;
 						case "FILE_TRANSFER":
@@ -105,6 +124,16 @@ public class SE extends GridService {
 							// add uploaded file to SE's catalog
 							catalog.add(file);
 							sendAckTo("return-" + mailbox);
+							break;
+						
+						case "DOWNLOAD_REQUEST_TIMEOUT": 
+							
+							String f = message.getFileName();
+							long s = getLogicalFileByName(f).getSize();			
+							Msg.debug("SE '" + name + "' send file '" + f + "' of size " + s + " to '"
+									+ ((Job) message.getSender()).getName() + "' . With timeout");
+
+							sendFileTo("return-" + mailbox, s);
 							break;
 						default:
 							break;
@@ -129,6 +158,15 @@ public class SE extends GridService {
 		Msg.info("Sent download request for '" + logicalFileName + "'. Waiting for reception ...");
 		SEMessage m = (SEMessage)Message.getFrom("return-" + mailbox);
 		return m.getSize();
+	}
+	
+	public long download_timeout(String logicalFileName, double timeout) {
+		String mailbox = this.findAvailableMailbox(2000);
+		SEMessage.sendTo(mailbox, "DOWNLOAD_REQUEST_TIMEOUT", logicalFileName);
+		Msg.info("Sent download request for '" + logicalFileName + "' with timeout " +timeout +". Waiting for reception ...");
+		SEMessage m = (SEMessage)Message.getFrom("return-" + mailbox, timeout);
+		if(m != null) return  m.getSize();
+		else return 0;
 	}
 
 	public String toString() {

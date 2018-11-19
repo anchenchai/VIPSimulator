@@ -20,8 +20,9 @@ public abstract class LCG {
 		se.upload(logicalFileName,localFileSize);
 		Msg.info("SE '" + se.getName() + "' replied with an ACK");
 
-		// Register file into LFC
 		LogicalFile file = new LogicalFile(logicalFileName, localFileSize, se);
+		
+		// Register file into LFC
 		Msg.info("Ask '" + lfc.getName() + "' to register " + file.toString());
 
 		lfc.register(file);
@@ -29,6 +30,23 @@ public abstract class LCG {
 		Msg.info("lcg-cr of '" + logicalFileName + "' on '" + lfc.getName() + "' completed");
 	}
 	
+	// cp with timeout
+	public static boolean cp(String logicalFileName, String localFileName, SE src, LFC lfc, double timeout){
+		
+		long fileSize=0;
+		Msg.info("lcg-cp with timeout'" + logicalFileName  + "' using '" + src.getName() + "'");
+		
+		fileSize = src.download_timeout(logicalFileName,timeout);
+		if(fileSize != 0){
+			Msg.info("lcg-cp of '" + logicalFileName + "' on '" +src.getName()+ "' completed");
+			return true;
+		}
+		else{	
+			Msg.info("lcg-cp of '" + logicalFileName + "' on '" + src.getName() 
+						+ "' passed timeout!!");
+			return false;	
+		}
+	}
 	
 	public static String cp1(String logicalFileName, String localFileName, LFC lfc) {
 		Timer duration = new Timer();
@@ -36,7 +54,7 @@ public abstract class LCG {
 		Msg.info("lcg-cp '" + logicalFileName + "' to '" + localFileName + "' using '" + lfc.getName() + "'");
 
 		// get Logical File from the LFC
-		LogicalFile file = lfc.getLogicalFileByName(logicalFileName);		
+		LogicalFile file = lfc.getLogicalFile(logicalFileName);	
 		GfalFile gf = new GfalFile(file);	
 		lfc.fillsurls(gf);
 		Msg.info("LFC '" + lfc.getName() + "' replied: " + file.toString());
@@ -63,7 +81,8 @@ public abstract class LCG {
 	        }
 		}
 		if(flag) Msg.info("Fail to download "+ localFileName +", all replicas are not available");
-		else Msg.info("lcg-cp of '" + logicalFileName + "' to '" + localFileName + "' completed");
+		else Msg.info("lcg-cp of '" + logicalFileName + "' to '" + localFileName + "' using "+ 
+						gf.getCurrentReplica().name +" completed");
 		
 		duration.stop();
 		return gf.getCurrentReplica() + "," +fileSize + "," + duration.getValue();
@@ -104,7 +123,7 @@ public abstract class LCG {
 		duration.stop();
 		return closeSE + "," + fileSize + "," + duration.getValue();
 	}
-	
+
 	public static Vector<String> ls(LFC lfc, String directoryName) {
 		Vector<String> results = new Vector<String>();
 

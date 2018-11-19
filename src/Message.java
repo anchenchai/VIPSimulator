@@ -10,6 +10,7 @@ import org.simgrid.msg.MsgException;
 import org.simgrid.msg.Task;
 import org.simgrid.msg.HostFailureException;
 import org.simgrid.msg.TaskCancelledException;
+import org.simgrid.msg.TimeoutException;
 
 public abstract class Message extends Task {
 	protected String fileName = null;
@@ -37,6 +38,25 @@ public abstract class Message extends Task {
 		return message;
 	}
 
+	public static Message getFrom(String mailbox, double timeout) {
+		Message message = null;
+		try {
+			message = (Message) Task.receive(mailbox, timeout);
+			Msg.debug("Received a '" + message.getType() + "' message from " + mailbox + "with timeout : " + timeout );
+			// Simulate the cost of the local processing of the request.
+			// Depends on the value set when the Message was created
+			message.execute();
+		} catch(TimeoutException e){
+			//e.printStackTrace();
+			Msg.info("Message passed Timeout !!");
+			return null;
+		 }
+		catch (MsgException e) {
+			e.printStackTrace();
+		}
+		return message;
+	}
+	
 	protected Message(String name, double flopAmount, double byteAmount) {
 		super(name, flopAmount, byteAmount);
 	}

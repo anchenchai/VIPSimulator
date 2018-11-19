@@ -43,10 +43,10 @@ public class Merge extends Job {
 			uploadFileSize = VIPSimulator.fixedFileSize;
 		} else {
 			uploadFileSize = (args.length > 2 ? Long.valueOf(args[2]).longValue() : 1000000);
-			if (VIPSimulator.version == 3){
+//			if (VIPSimulator.version == 3){
 				actualSources.add(VIPServer.getSEbyName(args[3]));
 				actualSources.add(VIPServer.getSEbyName(args[4]));
-			}
+//			}
 		}
 
 		Msg.info("Register Merge on '" + getName() + "'");
@@ -88,15 +88,10 @@ public class Merge extends Job {
 						lrDuration.stop();
 
 						if (VIPSimulator.version == 2){
-							// if closeSE found, lcg-cp with closeSE, otherwise normal lcg-cp
-							if(replicaLocations.contains(getCloseSE())) 
-								transferInfo= LCG.cp(logicalFileName, 
-										"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
-										getCloseSE());
-							else
-								transferInfo= LCG.cp(logicalFileName, 
-										"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
-										VIPServer.getDefaultLFC());
+							transferInfo= LCG.cp(logicalFileName, 
+									"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
+									actualSources.remove(0));
+							
 						} else {
 							transferInfo= LCG.cp(logicalFileName, 
 									"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),

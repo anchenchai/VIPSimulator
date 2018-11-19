@@ -21,6 +21,10 @@ public class VIPSimulator {
 	public static int version;
 	public static long fixedFileSize;
 	public static String workflowVersion; 
+	public static String Lfc;
+	public static String algorithm;
+	public static double Timeout;
+	
 	
 	public static void main(String[] args) {
 		Msg.init(args);
@@ -51,8 +55,17 @@ public class VIPSimulator {
 
 		Msg.info("PARAMS:   sostime is " + sosTime + ", number of Gate tasks is " + numberOfGateJobs
 				+ ", number of merge tasks is " + numberOfMergeJobs + ", cpu merge time is " + cpuMergeTime);
+		
+		// In version 2, Lfc_catalog is given in command line as a global parameter
+		// In version 3, Lfc_catalog is defined in deployment file and only for concerned SE
+		Lfc = args.length > 10 ? args[10] : null;
+		// The algorithm used for replica selection, it's normal lcg_cp by default
+		algorithm = args.length > 11 ? args[11] : "lcg_cp";
+		Timeout = args.length > 12 ? Double.valueOf(args[12]).doubleValue()  : 244;
+		
+		workflowVersion = args.length > 13 ? args[13] : "static";
+		
 
-		workflowVersion = args.length > 12 ? args[10] : "static";
 		
 		// Load the platform description
 		Msg.createEnvironment(platform_file);

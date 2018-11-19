@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 /*
@@ -10,7 +13,7 @@ import java.util.Vector;
  */
 
 public class GfalFile {
-	public Vector<SE> replicas;
+	public List<SE> replicas;
 	private long nbreplicas;
 	private long nb_current_replica;
 	private LogicalFile logicalFile;
@@ -20,7 +23,7 @@ public class GfalFile {
 		this.logicalFile = new LogicalFile(lf.getName(),lf.getSize(),lf.getLocations());
 		this.nbreplicas= lf.getLocations().size();
 		this.nb_current_replica = 0;
-		this.replicas = new Vector<SE>();
+		this.replicas = new ArrayList<SE>(Collections.nCopies((int)this.nbreplicas, null));
 	}
 	
 	public void NextReplica(){

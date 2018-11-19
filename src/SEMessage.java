@@ -7,6 +7,7 @@
  */
 import org.simgrid.msg.Msg;
 import org.simgrid.msg.MsgException;
+import org.simgrid.msg.TimeoutException;
 
 public class SEMessage extends Message {
 
@@ -39,7 +40,11 @@ public class SEMessage extends Message {
 		try {
 			Msg.debug("Send a '" + type + "' message to " + mailbox);
 			message.send(mailbox);
-		} catch (MsgException e) {
+		} catch(TimeoutException e){
+			//e.printStackTrace();
+			Msg.info("Timeout exception when emitting a '" + type + "' message to '" + mailbox + "'");
+		 }
+		catch (MsgException e) {
 			Msg.error("Something went wrong when emitting a '" + type + "' message to '" + mailbox + "'");
 			e.printStackTrace();
 		}
