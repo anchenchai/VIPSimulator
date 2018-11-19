@@ -15,35 +15,45 @@ public class SEMessage extends Message {
 	public long getSize() {
 		return size;
 	}
-
-	/**
-	 * Constructor, builds a new control (DOWNLOAD_REQUEST/UPLOAD_ACK) message
-	 */
-	private SEMessage(String type, String fileName, long size) {
-		super(type, 1125000000, 100);
-		this.fileName = fileName;
-		this.size = size;
-	}
-
+	
 	/**
 	 * Constructor, builds a new FILE_TRANSFER message
 	 */
-	private SEMessage(String type, long size) {
+	private SEMessage(String type, String fileName, long size) {
 		super(type, 1125000000, size);
+		this.fileName = fileName;
 		this.size = size;
 	}
+	
+	/**
+	 * Constructor, builds a new control (DOWNLOAD_REQUEST/UPLOAD_ACK) message
+	 * 
+	 */
+	private SEMessage(String type, String fileName) {
+		super(type, 1125000000, 100);
+		this.fileName = fileName;
+	}
 
-	public static void sendTo(String mailbox, String type, String fileName,
-			long size) {
-		SEMessage message = (fileName == null) ? new SEMessage(type, size)
-				: new SEMessage(type, fileName, size);
+	public static void sendTo(String mailbox, String type, String fileName, long size) {
+		SEMessage message = new SEMessage(type, fileName, size);
 		try {
 			Msg.debug("Send a '" + type + "' message to " + mailbox);
 			message.send(mailbox);
 		} catch (MsgException e) {
-			Msg.error("Something went wrong when emitting a '" + type
-					+ "' message to '" + mailbox + "'");
+			Msg.error("Something went wrong when emitting a '" + type + "' message to '" + mailbox + "'");
 			e.printStackTrace();
 		}
 	}
+
+	public static void sendTo(String mailbox, String type, String fileName) {
+		SEMessage message =new SEMessage(type, fileName);
+		try {
+			Msg.debug("Send a '" + type + "' message to " + mailbox);
+			message.send(mailbox);
+		} catch (MsgException e) {
+			Msg.error("Something went wrong when emitting a '" + type + "' message to '" + mailbox + "'");
+			e.printStackTrace();
+		}
+	}
+
 }

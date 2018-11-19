@@ -26,8 +26,7 @@ public abstract class Message extends Task {
 		Message message = null;
 		try {
 			message = (Message) Task.receive(mailbox);
-			Msg.debug("Received a '" + message.getType() + "' message from "
-					+ mailbox);
+			Msg.debug("Received a '" + message.getType() + "' message from " + mailbox);
 			// Simulate the cost of the local processing of the request.
 			// Depends on the value set when the Message was created
 			message.execute();

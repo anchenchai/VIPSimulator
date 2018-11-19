@@ -16,13 +16,18 @@ public abstract class Job extends Process {
 	protected Timer uploadTime;
 	protected Timer uploadTestTime;
 
+	protected void logDownload(int jobId, String transferInfo, double lrDuration, String jobType){
+		String[] fields= transferInfo.split(","); // 0: source, 1: size, 2: duration
+		System.err.println(jobId + "," + fields[0] + "," + getHost().getName() + "," + fields[1] + "," 
+				+ (Double.valueOf(fields[2]).doubleValue() + lrDuration) + "," + jobType + ",2");
+	}
+
 	public String getName() {
 		return name;
 	}
 
 	public void setName() {
-		// Build the mailbox name from the PID and the host name. This might be
-		// useful to distinguish different Gate processes running on a same host
+		// Build the mailbox name from the PID and the host name to distinguish Gate processes running on a same host.
 		this.name = getPID() + "@" + getHost().getName();
 	}
 
@@ -41,6 +46,7 @@ public abstract class Job extends Process {
 	public void end() {
 		GateMessage.sendTo(name, "END", 0);
 	}
+
 
 	public Job(Host host, String name, String[] args) {
 		super(host, name, args);

@@ -1,7 +1,8 @@
 /*
  * Copyright (c) Centre de Calcul de l'IN2P3 du CNRS
  * Contributor(s) : Frédéric SUTER (2015)
-
+ *                  Anchen CHAI (2016)
+ 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the license (GNU LGPL) which comes with this package.
  */
@@ -36,16 +37,17 @@ public class LogicalFile {
 	}
 
 	public SE getLocation() {
-		// TODO return SE randomly for now. Might be interesting to implement
-		// TODO some load balancing strategy
+		// TODO return SE randomly for now. Might be interesting to implement some load balancing strategy
 		int selectedIndex = (index++) % locations.size();
 		// randomGenerator.nextInt(locations.size());
 		return locations.get(selectedIndex);
 	}
-
+	
+	public Vector<SE> getLocations() {
+		return locations;
+	}
 	public String toString() {
-		return "file '" + name + "' of size " + size + " stored on "
-				+ locations.toString();
+		return "file '" + name + "' of size " + size + " stored on " + locations.toString();
 	}
 
 	@Override

@@ -15,14 +15,12 @@ import org.simgrid.msg.Process;
 public class Merge extends Job {
 
 	private void connect() {
-		// Use of some simulation magic here, every worker knows the mailbox of
-		// the VIP server
+		// Use of some simulation magic here, every worker knows the mailbox of  the VIP server
 		GateMessage.sendTo("VIPServer", "MERGE_CONNECT", 0);
 	}
 
 	private void disconnect() {
-		// Use of some simulation magic here, every worker knows the mailbox of
-		// the VIP server
+		// Use of some simulation magic here, every worker knows the mailbox of the VIP server
 		GateMessage.sendTo("VIPServer", "MERGE_DISCONNECT", 0);
 	}
 
@@ -35,17 +33,20 @@ public class Merge extends Job {
 		setName();
 		long nbParticles = 0;
 		long uploadFileSize = 0;
+		Vector<SE> actualSources = new Vector<SE>();
 
-		String transfer_info;
+		String transferInfo;
 
 		int jobId = (args.length > 0 ? Integer.valueOf(args[0]).intValue() : 1);
-		long executionTime = (args.length > 1 ? 1000 * Long.valueOf(args[1])
-				.longValue() : VIPSimulator.sosTime);
+		long executionTime = (args.length > 1 ? 1000 * Long.valueOf(args[1]).longValue() : VIPSimulator.sosTime);
 		if (VIPSimulator.version == 1) {
 			uploadFileSize = VIPSimulator.fixedFileSize;
 		} else {
-			uploadFileSize = (args.length > 2 ? Long.valueOf(args[2])
-					.longValue() : 1000000);
+			uploadFileSize = (args.length > 2 ? Long.valueOf(args[2]).longValue() : 1000000);
+			if (VIPSimulator.version == 3){
+				actualSources.add(VIPServer.getSEbyName(args[3]));
+				actualSources.add(VIPServer.getSEbyName(args[4]));
+			}
 		}
 
 		Msg.info("Register Merge on '" + getName() + "'");
@@ -57,17 +58,15 @@ public class Merge extends Job {
 			switch (message.getType()) {
 			case "BEGIN":
 				Msg.info("Processing Merge");
-				if (VIPSimulator.version == 2) {
+				if (VIPSimulator.version != 1) {
 					// upload-test
 					// TODO to be factored at some point
 					uploadTestTime.start();
-					LCG.cr("output-0.tar.gz-uploadTest", 12,
-							"output-0.tar.gz-uploadTest", getCloseSE(),
+					LCG.cr("output-0.tar.gz-uploadTest", 12, "output-0.tar.gz-uploadTest", getCloseSE(),
 							VIPServer.getDefaultLFC());
 					uploadTestTime.stop();
-					System.err.println(jobId + "," + getCloseSE() + ","
-							+ getHost().getName() + ",12,"
-							+ uploadTestTime.getValue() + ",0");
+					System.err.println(jobId + "," + getHost().getName() + getCloseSE() + "," + ",12,"
+							+ uploadTestTime.getValue() + ",merge,0");
 
 					// Downloading inputs:
 					//   1) wrapper script
@@ -79,25 +78,39 @@ public class Merge extends Job {
 						Msg.error("Some input files are missing. Exit!");
 						System.exit(1);
 					}
-					transfer_info = LCG.cp(
-							VIPSimulator.mergeInputFileNames.get(0),
-							"/scratch/merge.sh.tar.gz",
-							VIPServer.getDefaultLFC());
-					System.err.println(jobId + "," + getHost().getName() + ","
-							+ transfer_info + ",2");
 
-					transfer_info = LCG.cp(
-							VIPSimulator.mergeInputFileNames.get(1),
-							"/scratch/file.zip", VIPServer.getDefaultLFC());
-					System.err.println(jobId + "," + getHost().getName() + ","
-							+ transfer_info + ",2");
+					Vector<SE> replicaLocations;
+					for (String logicalFileName: VIPSimulator.mergeInputFileNames){
+						Timer lrDuration = new Timer();
+						// Merge job first do lcg-lr to check whether input file exists in closeSE
+						lrDuration.start();
+						replicaLocations = LCG.lr(VIPServer.getDefaultLFC(),logicalFileName);
+						lrDuration.stop();
+
+						if (VIPSimulator.version == 2){
+							// if closeSE found, lcg-cp with closeSE, otherwise normal lcg-cp
+							if(replicaLocations.contains(getCloseSE())) 
+								transferInfo= LCG.cp(logicalFileName, 
+										"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
+										getCloseSE());
+							else
+								transferInfo= LCG.cp(logicalFileName, 
+										"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
+										VIPServer.getDefaultLFC());
+						} else {
+							transferInfo= LCG.cp(logicalFileName, 
+									"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
+									actualSources.remove(0));
+						}
+
+						logDownload(jobId, transferInfo, lrDuration.getValue(), "merge");
+					}
 					downloadTime.stop();
 				}
 
 				Vector<String> fileNameList = null;
 				while (fileNameList == null) {
-					fileNameList = LCG
-							.ls(VIPServer.getDefaultLFC(), "results/");
+					fileNameList = LCG.ls(VIPServer.getDefaultLFC(), "results/");
 					if (fileNameList.size() == 0) {
 						Msg.warn("No files to merge. Sleeping 100ms and retry");
 						Process.sleep(100);
@@ -110,17 +123,13 @@ public class Merge extends Job {
 					// Get the file name, without the directory name
 					String fileName = fullName.split("/")[1];
 
-					transfer_info = LCG.cp(fullName, "/scratch/" + fileName,
-							VIPServer.getDefaultLFC());
+					transferInfo = LCG.cp(fullName, "/scratch/" + fileName, VIPServer.getDefaultLFC());
 
-					Msg.info(fullName + " " + fileName + "="
-							+ fileName.split("-")[0]);
-					nbParticles += Long.valueOf(fileName.split("-")[0])
-							.longValue();
+					Msg.info(fullName + " " + fileName + "=" + fileName.split("-")[0]);
+					nbParticles += Long.valueOf(fileName.split("-")[0]).longValue();
 
 					Msg.info("Received " + nbParticles + " particles to merge");
-					System.err.println(jobId + "," + getHost().getName() + ","
-							+ transfer_info + ",2");
+					logDownload(jobId, transferInfo, 0, "merge");
 					downloadTime.stop();
 				}
 
@@ -128,22 +137,18 @@ public class Merge extends Job {
 				Process.sleep(executionTime);
 				computeTime.stop();
 
-				String logicalFileName = "results/"
-						+ Long.toString(nbParticles) + "-merged-" + getName()
-						+ "-" + Double.toString(Msg.getClock()) + ".tgz";
+				String logicalFileName = "results/" + Long.toString(nbParticles) + "-merged-" + getName()+ "-"
+						+ Double.toString(Msg.getClock()) + ".tgz";
 
 				uploadTime.start();
-				LCG.cr("local_file.tgz", uploadFileSize, logicalFileName,
-						getCloseSE(), VIPServer.getDefaultLFC());
+				LCG.cr("local_file.tgz", uploadFileSize, logicalFileName, getCloseSE(), VIPServer.getDefaultLFC());
 				uploadTime.stop();
-				System.err.println(jobId + "," + getCloseSE() + ","
-						+ getHost().getName() + "," + uploadFileSize + ","
+				System.err.println(jobId + "," + getCloseSE() + "," + getHost().getName() + "," + uploadFileSize + ","
 						+ uploadTime.getValue() + ",1");
 
 				Msg.info("Disconnecting MERGE job. Inform VIP server.");
 				this.disconnect();
-				System.out.println(jobId + "," + downloadTime.getValue() + ","
-						+ uploadTime.getValue());
+				System.out.println(jobId + "," + downloadTime.getValue() + "," + uploadTime.getValue());
 				break;
 			default:
 				break;
