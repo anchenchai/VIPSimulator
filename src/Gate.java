@@ -45,15 +45,21 @@ public class Gate extends Job {
 		GateMessage.sendTo("VIPServer", "GATE_DISCONNECT", 0);
 	}
 	
+	
+	// The "cache-hit" dynamic replication method
 	private String cp_dynamic(String logicalFileName, String localFileName, LFC lfc, SE closeSE) throws HostFailureException {
 		
 		int i=0;
 		String info = "";
 		String SE_file = "";
-		double min_bandwidth = 4e6; // minimum bandwidth acceptable is 4Mbps
+
 		double timeout;
 		double patient_time;
 		int num_retry = 3; 	// maximum retry of lcg-rep		
+		
+		if(VIPSimulator.Timeout == 0) timeout = 1e9;
+		else timeout = VIPSimulator.Timeout;	
+		
 		
 		Timer duration = new Timer();
 		Timer cr_timer = new Timer();
@@ -65,12 +71,9 @@ public class Gate extends Job {
 		LogicalFile file = lfc.getLogicalFile(logicalFileName);
 		Msg.info("LFC '" + lfc.getName() + "' replied: " + file.toString());
 		
-//		timeout = VIPSimulator.Timeout;	
-
-//		timeout = (file.getSize()*8)/ min_bandwidth + 1;
 		
-		timeout = 1e9;
-		patient_time = VIPSimulator.Timeout;		
+		timeout = 140;
+		patient_time = 1000;		
 	
 		duration.start();
 		// get all replicas locations by lcg-lr
@@ -194,6 +197,7 @@ public class Gate extends Job {
 	}
 	
 	
+	// lcg_cp with timeout and 3 retries
 	private String cp_timeout(String logicalFileName, String localFileName, LFC lfc) throws HostFailureException {
 		
 		int num_retry = 3; 	// maximum retry of lcg-cp	
@@ -201,10 +205,11 @@ public class Gate extends Job {
 		int j = 0;
 		String info = "";
 		Timer duration_retry = new Timer();
-		Timer final_transfer = new Timer();
 		
 		if(VIPSimulator.Timeout == 0) timeout = 1e9;
 		else timeout = VIPSimulator.Timeout;	
+		
+		timeout = 140;
 		
 		Msg.info("lcg-cp with timeout'" + logicalFileName + "' to '" + localFileName + "' using '" + lfc.getName() + "'");
 		
@@ -239,7 +244,6 @@ public class Gate extends Job {
 		
 		
 	}
-	
 	
 	
 	public Gate(Host host, String name, String[] args) {
@@ -314,16 +318,16 @@ public class Gate extends Job {
 							
 							if(VIPSimulator.algorithm.equals("lcg_cp")){
 							// lcg-cp in production 
-//							transferInfo = LCG.cp1(logicalFileName,
-//									"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
-//									VIPServer.getDefaultLFC());
+							transferInfo = LCG.cp1(logicalFileName,
+									"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
+									VIPServer.getDefaultLFC());
 							
 							
 							// lcg-cp with timeout and 3 retries
 						
-							transferInfo = cp_timeout(logicalFileName,
-							"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
-							VIPServer.getDefaultLFC());
+//							transferInfo = cp_timeout(logicalFileName,
+//							"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
+//							VIPServer.getDefaultLFC());
 								
 								
 							}	

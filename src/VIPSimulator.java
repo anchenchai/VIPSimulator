@@ -61,13 +61,11 @@ public class VIPSimulator {
 		Lfc = args.length > 10 ? args[10] : null;
 		// The algorithm used for replica selection, it's normal lcg_cp by default
 		algorithm = args.length > 11 ? args[11] : "lcg_cp";
-		Timeout = args.length > 12 ? Double.valueOf(args[12]).doubleValue()  : 244;
+		Timeout = args.length > 12 ? Double.valueOf(args[12]).doubleValue()  : 244.0;
 		
 		workflowVersion = args.length > 13 ? args[13] : "static";
 		
-
-		
-		// Load the platform description
+		// Load the platform description and start simu
 		Msg.createEnvironment(platform_file);
 		// and deploy the application
 		Msg.deployApplication(deployment_file);

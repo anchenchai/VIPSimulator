@@ -316,8 +316,6 @@ public class LFC extends GridService {
 		Job job = (Job) getCurrentProcess();
 		String JobName = job.getHost().getName();
 		SE CloseSE = job.getCloseSE();
-		String HostName = JobName.split("\\.")[0];
-		String DomainName = JobName.substring(HostName.length()+1, JobName.length());
 		String[] tmp = JobName.split("\\.");
 		String Country = tmp[tmp.length-1];
 		Msg.info("Construct sorted list of replicas for "+ job.getName());
@@ -326,8 +324,6 @@ public class LFC extends GridService {
 		for(SE se: fileReplicas){
 			
 			String SeName = se.getName();
-			String SeHostName = SeName.split("\\.")[0];
-			String SeDomainName = SeName.substring(SeHostName.length()+1, SeName.length());
 			String[] t = SeName.split("\\.");
 			String SeCountry = t[t.length-1];
 			
@@ -350,8 +346,7 @@ public class LFC extends GridService {
 			}
 			if(Country.equals(SeCountry)){
 				randomGenerator.setSeed((long) System.currentTimeMillis()+getPID());
-//				randomInt = ThreadLocalRandom.current().nextInt(next_local - next_defaultse + 1) + next_defaultse;
-				randomInt = randomGenerator.nextInt(next_local - next_defaultse + 1) + next_defaultse;
+				randomInt = ThreadLocalRandom.current().nextInt(next_local - next_defaultse + 1) + next_defaultse;
 				tmp1 = gf.replicas.get(randomInt);
 				tmp2 = gf.replicas.get(next_local);
 				gf.replicas.set(randomInt, se);
@@ -365,8 +360,7 @@ public class LFC extends GridService {
 				continue;
 			}
 			randomGenerator.setSeed((long) System.currentTimeMillis()+getPID());
-//			randomInt = ThreadLocalRandom.current().nextInt(next_others - next_local + 1) + next_local;
-			randomInt = randomGenerator.nextInt(next_others - next_local + 1) + next_local;
+			randomInt = ThreadLocalRandom.current().nextInt(next_others - next_local + 1) + next_local;
 			Msg.debug("next_others:"+next_others + "  next_local: "+next_local+"  randomInt:"+ randomInt);
 			tmp1 = gf.replicas.get(randomInt);
 			gf.replicas.set(randomInt, se);
