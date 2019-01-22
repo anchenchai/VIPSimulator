@@ -84,7 +84,7 @@ public class Gate extends Job {
 			SE_file = closeSE.getName() +"_" + logicalFileName; 
 			// if some job has already created lock for replicating file in a SE
 			// check the status of file in a SE
-			if(lfc.getTransferLock(SE_file) == 1){	
+			if(lfc.getTransferLock(SE_file) == 1){	// A transfer lock already exists, jobs' behavior will depend on the replica info
 				int status = lfc.getReplicaInfo(SE_file);
 				switch (status) {
 				case 0: // file is replicating to closeSE in progress	
@@ -121,11 +121,10 @@ public class Gate extends Job {
 					break;	
 				}			
 			}	
-			else{	
+			else{	// No transfer lock exists, jobs will try to upload file onto the local SE
 				int flag;
 				flag = lfc.createTransferLock(SE_file);
-				// first job will try to replicate file onto closeSE
-				if(flag == 0){		
+				if(flag == 0){	// Only one job tries to replicate file onto closeSE
 					SE src = null;
 					boolean flag_lcg_cp_timeout;
 					GfalFile gf = new GfalFile(file);	
@@ -165,7 +164,7 @@ public class Gate extends Job {
 						info = src + "," +file.getSize() + "," + 0;
 					}
 				}		
-				else{
+				else{  // jobs wait the file to be ready in their local SE for at most a patient_time
 					int status = lfc.getReplicaInfo(SE_file);
 					i = 0;
 					while(status != 1 && i< patient_time){		
