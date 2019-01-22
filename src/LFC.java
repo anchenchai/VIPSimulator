@@ -202,7 +202,8 @@ public class LFC extends GridService {
 							else 	 sendReplicaInfo("return-" + mailbox, transfer_lock, 0);
 							break;
 							
-						case "CREATE_Transfer_Lock": // create the transfer lock for uploading file onto local SE by the first job in a site
+						case "CREATE_Transfer_Lock": // create the transfer lock for uploading file onto local SE
+													 // by the first job in a site
 							String new_transfer_lock = message.getFileName();
 							boolean flag_lock;
 							// This mutex ensures that only one gate job creates transfer lock

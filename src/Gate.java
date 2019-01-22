@@ -82,8 +82,8 @@ public class Gate extends Job {
 		}
 		else{
 			SE_file = closeSE.getName() +"_" + logicalFileName; 
-			// if some job has already created lock for replicating file in SE
-			// check the status of file in SE
+			// if some job has already created lock for replicating file in a SE
+			// check the status of file in a SE
 			if(lfc.getTransferLock(SE_file) == 1){	
 				int status = lfc.getReplicaInfo(SE_file);
 				switch (status) {
@@ -124,7 +124,7 @@ public class Gate extends Job {
 			else{	
 				int flag;
 				flag = lfc.createTransferLock(SE_file);
-				// first job will try to replicate file into closeSE
+				// first job will try to replicate file onto closeSE
 				if(flag == 0){		
 					SE src = null;
 					boolean flag_lcg_cp_timeout;
