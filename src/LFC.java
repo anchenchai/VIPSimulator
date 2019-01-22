@@ -177,7 +177,7 @@ public class LFC extends GridService {
 							sendLogicalFile("return-" + mailbox, fileLr);
 							break;
 							
-						case "ASK_RI":	
+						case "ASK_RI":	// ask the replica information in a given SE
 							String SE_File = message.getFileName();
 							transfer_locks.get(SE_File).acquire();
 							int info = replicas_info.get(SE_File);
@@ -185,7 +185,7 @@ public class LFC extends GridService {
 							sendReplicaInfo("return-" + mailbox, SE_File, info);
 							break;
 						
-						case "Modify_RI":
+						case "Modify_RI": // modify the replica information in a given SE
 							String m_replica_info = message.getFileName();
 							int status_new = message.getReplicas_info();
 							transfer_locks.get(m_replica_info).acquire();
@@ -194,7 +194,7 @@ public class LFC extends GridService {
 							sendAckTo("return-" + mailbox);	
 							break;
 							
-						case "ASK_Transfer_Lock":
+						case "ASK_Transfer_Lock": // test whether other jobs have already started to upload file onto the local SE
 							String transfer_lock = message.getFileName();
 							boolean flag = transfer_locks.containsKey(transfer_lock);
 							// if lock for copy file into SE exists, return 1; otherwise 0.
@@ -202,7 +202,7 @@ public class LFC extends GridService {
 							else 	 sendReplicaInfo("return-" + mailbox, transfer_lock, 0);
 							break;
 							
-						case "CREATE_Transfer_Lock":
+						case "CREATE_Transfer_Lock": // create the transfer lock for uploading file onto local SE by the first job in a site
 							String new_transfer_lock = message.getFileName();
 							boolean flag_lock;
 							// This mutex ensures that only one gate job creates transfer lock
@@ -264,6 +264,8 @@ public class LFC extends GridService {
 		return m.getFile().getLocations();
 	}
 
+	
+	// ask replica information for a given File in a given SE 
 	public int getReplicaInfo(String SE_File){
 		String mailbox = this.findAvailableMailbox(100);
 		LFCMessage.sendTo(mailbox, "ASK_RI", SE_File, null);
@@ -272,7 +274,7 @@ public class LFC extends GridService {
 		return m.getReplicas_info();
 	}
 	
-
+	// modify replica information for a given File in a given SE 
 	public void modifyReplicaInfo(String SE_File, int info){
 		String mailbox = this.findAvailableMailbox(100);
 		LFCMessage.sendTo(mailbox, "Modify_RI", SE_File, info);
@@ -280,7 +282,7 @@ public class LFC extends GridService {
 		Message.getFrom("return-" + mailbox);
 	}
 	
-	
+	// check the transfer lock for uploading a File onto a given SE
 	public int getTransferLock(String SE_File){
 		String mailbox = this.findAvailableMailbox(100);
 		LFCMessage.sendTo(mailbox, "ASK_Transfer_Lock", SE_File, null);
@@ -288,7 +290,7 @@ public class LFC extends GridService {
 		LFCMessage m = (LFCMessage) Message.getFrom("return-" + mailbox);
 		return m.getReplicas_info();
 	}
-	
+	// create the transfer lock for uploading a File onto a given SE
 	public int createTransferLock(String SE_File){
 		String mailbox = this.findAvailableMailbox(100);
 		LFCMessage.sendTo(mailbox, "CREATE_Transfer_Lock", SE_File, null);
