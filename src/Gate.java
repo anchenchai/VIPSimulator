@@ -90,7 +90,7 @@ public class Gate extends Job {
 				case 0: // file is replicating to closeSE in progress	
 					
 					Msg.info("case0 : replicate file into closeSE in progress");
-					// Wait timeout before normal lcg-cp 
+					// Wait a patient time before doing normal lcg-cp 
 					while(status != 1 && i< patient_time){		
 						Process.sleep(2000);
 						status = lfc.getReplicaInfo(SE_file);
