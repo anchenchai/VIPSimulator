@@ -60,7 +60,6 @@ public class Gate extends Job {
 		if(VIPSimulator.Timeout == 0) timeout = 1e9;
 		else timeout = VIPSimulator.Timeout;	
 		
-		
 		Timer duration = new Timer();
 		Timer cr_timer = new Timer();
 		double cr_duration = 0.0;
@@ -70,7 +69,6 @@ public class Gate extends Job {
 		// get Logical File from the LFC
 		LogicalFile file = lfc.getLogicalFile(logicalFileName);
 		Msg.info("LFC '" + lfc.getName() + "' replied: " + file.toString());
-		
 		
 		timeout = 140;
 		patient_time = 1000;		
@@ -103,7 +101,6 @@ public class Gate extends Job {
 					if(status == 1){	
 						Msg.debug("Succeed to replicate file in CloseSE");
 						info = LCG.cp(logicalFileName, localFileName,closeSE);
-
 					}		
 					else{
 						Msg.debug("File still not available in CloseSE, do a normal lcg-cp");
@@ -196,8 +193,7 @@ public class Gate extends Job {
 	
 	}
 	
-	
-	// lcg_cp with timeout and 3 retries
+	// static replication with timeout and 3 retries
 	private String cp_timeout(String logicalFileName, String localFileName, LFC lfc) throws HostFailureException {
 		
 		int num_retry = 3; 	// maximum retry of lcg-cp	
@@ -241,7 +237,6 @@ public class Gate extends Job {
 		}
 		// succeed with timeout
 		else return info = src + "," +file.getSize() + "," + duration_retry.getValue();
-		
 		
 	}
 	
@@ -320,16 +315,14 @@ public class Gate extends Job {
 							// lcg-cp in production 
 							transferInfo = LCG.cp1(logicalFileName,
 									"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
-									VIPServer.getDefaultLFC());
-							
+									VIPServer.getDefaultLFC());						
 							
 							// lcg-cp with timeout and 3 retries
 						
 //							transferInfo = cp_timeout(logicalFileName,
 //							"/scratch/"+logicalFileName.substring(logicalFileName.lastIndexOf("/")+1),
 //							VIPServer.getDefaultLFC());
-								
-								
+															
 							}	
 							else{
 								// dynamic replication

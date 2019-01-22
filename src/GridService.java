@@ -34,11 +34,9 @@ public abstract class GridService extends Process {
 	// Mutex to modify the status in HashMap replicas_info
 	public HashMap<String, Mutex> transfer_locks = new HashMap<String, Mutex>();
 	
-	
 	// Global mutex for GridService to prevent several jobs 
-	// to modify transfer_locks or replicas_info at same time  
+	// to modify transfer_locks or replicas_info at the same time  
 	public Mutex grid_mutex = new Mutex();
-	
 	
 	protected String findAvailableMailbox(long retryAfter) {
 		while (true) {
