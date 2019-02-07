@@ -17,7 +17,7 @@
 3) "all_execute_prestaging.sh": launch the simulation scenarios by selecting the replication algorithm
 
 
-   "all_execute_prestaging.sh dyn" means that running the simulation by using the dynamic replication algorithm implemented in our simulator. 
+   "all_execute_prestaging.sh dyn" means that running the simulation by using the dynamic replication algorithm implemented in the  VIPSimulator. 
    	
    Simulation results will be stored in workflow-XXX/csv_files/ with the following format:
 
