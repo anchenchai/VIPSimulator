@@ -2,7 +2,7 @@
 
    a. the platform description: we have 2 platform descriptions generated from real execution traces in this folder ("3level_scale" and "Avg_Merged_factor").
 
-   b. the workflow deployment file: they are generated in the simgrid_files/ folder of each workflow.
+   b. the workflow deployment file: they are generated in workflow-XXX/simgrid_files/ folder of each workflow.
 
    
    c. the simulator.
