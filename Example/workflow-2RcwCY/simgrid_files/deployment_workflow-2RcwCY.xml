@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd">
+<platform version="4">
+  <process host="vip.creatis.insa-lyon.fr" function="VIPServer"/>
+  <process host="bohr3226.tier2.hep.manchester.ac.uk" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-2RcwCY.csv"/>
+  </process>
+  <process host="se03.esc.qmul.ac.uk" function="SE"/>
+  <process host="storm-se-01.ba.infn.it" function="SE"/>
+  <process host="lcgse0.shef.ac.uk" function="SE"/>
+  <process host="sbgse1.in2p3.fr" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-2RcwCY.csv"/>
+  </process>
+  <process host="cirigridse01.univ-bpclermont.fr" function="SE"/>
+  <process host="marsedpm.in2p3.fr" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-2RcwCY.csv"/>
+  </process>
+  <process host="gfe02.grid.hep.ph.ic.ac.uk" function="SE"/>
+  <process host="se2.ppgrid1.rhul.ac.uk" function="SE"/>
+  <process host="storm-01.roma3.infn.it" function="SE"/>
+  <process host="tbn18.nikhef.nl" function="SE"/>
+  <process host="hepgrid11.ph.liv.ac.uk" function="SE"/>
+  <process host="se01.marie.hellasgrid.gr" function="SE"/>
+  <process host="lpsc-se-dpm-server.in2p3.fr" function="SE"/>
+  <process host="gridsrm.pi.infn.it" function="SE"/>
+  <process host="se01.athena.hellasgrid.gr" function="SE"/>
+  <process host="srm.ciemat.es" function="SE"/>
+  <process host="gridsrm.ts.infn.it" function="SE"/>
+  <process host="se01-tic.ciemat.es" function="SE"/>
+  <process host="torik1.ulakbim.gov.tr" function="SE"/>
+  <process host="clrlcgse01.in2p3.fr" function="SE"/>
+  <process host="grid002.ics.forth.gr" function="SE"/>
+  <process host="se0.bordeaux.inra.fr" function="SE"/>
+  <process host="node12.datagrid.cea.fr" function="SE"/>
+  <process host="srm.target.rug.nl" function="SE"/>
+  <process host="se0.m3pec.u-bordeaux1.fr" function="SE"/>
+  <process host="heplnx204.pp.rl.ac.uk" function="SE"/>
+  <process host="se-dpm-server-grid.obspm.fr" function="SE"/>
+  <process host="dc2-grid-64.brunel.ac.uk" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-2RcwCY.csv"/>
+  </process>
+  <process host="srm-biomed.gridpp.rl.ac.uk" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-2RcwCY.csv"/>
+  </process>
+  <process host="ophelia.zih.tu-dresden.de" function="SE"/>
+  <process host="ccsrm02.in2p3.fr" function="DefaultSE">
+    <argument value="simgrid_files/LfcCatalog_workflow-2RcwCY.csv"/>
+  </process>
+  <process host="lfc-biomed.in2p3.fr" function="DefaultLFC">
+    <argument value="simgrid_files/LfcCatalog_workflow-2RcwCY.csv"/>
+  </process>
+  <process host="cirigridwn2.univ-bpclermont.fr" function="Gate" start_time="68">
+    <argument value="33039658"/>
+    <argument value="8774"/>
+    <argument value="3095593"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="45">
+    <argument value="33039659"/>
+    <argument value="8510"/>
+    <argument value="3050504"/>
+  </process>
+  <process host="cirigridwn2.univ-bpclermont.fr" function="Gate" start_time="23">
+    <argument value="33039660"/>
+    <argument value="9009"/>
+    <argument value="3092420"/>
+  </process>
+  <process host="cirigridwn4.univ-bpclermont.fr" function="Gate" start_time="23">
+    <argument value="33039661"/>
+    <argument value="8760"/>
+    <argument value="3106283"/>
+  </process>
+  <process host="cirigridwn4.univ-bpclermont.fr" function="Gate" start_time="45">
+    <argument value="33039662"/>
+    <argument value="8720"/>
+    <argument value="3090870"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="23">
+    <argument value="33039664"/>
+    <argument value="8642"/>
+    <argument value="3109025"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="180">
+    <argument value="33039665"/>
+    <argument value="8609"/>
+    <argument value="3070604"/>
+  </process>
+  <process host="cirigridwn4.univ-bpclermont.fr" function="Gate" start_time="23">
+    <argument value="33039666"/>
+    <argument value="8889"/>
+    <argument value="3094890"/>
+  </process>
+  <process host="cirigridwn2.univ-bpclermont.fr" function="Gate" start_time="23">
+    <argument value="33039667"/>
+    <argument value="9012"/>
+    <argument value="3081458"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="428">
+    <argument value="33039668"/>
+    <argument value="8662"/>
+    <argument value="3115477"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="113">
+    <argument value="33039669"/>
+    <argument value="8710"/>
+    <argument value="3076047"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="428">
+    <argument value="33039670"/>
+    <argument value="8684"/>
+    <argument value="3091249"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="158">
+    <argument value="33039671"/>
+    <argument value="8711"/>
+    <argument value="3099437"/>
+  </process>
+  <process host="cirigridwn4.univ-bpclermont.fr" function="Gate" start_time="45">
+    <argument value="33039672"/>
+    <argument value="8748"/>
+    <argument value="3091192"/>
+  </process>
+  <process host="cirigridwn4.univ-bpclermont.fr" function="Gate" start_time="45">
+    <argument value="33039673"/>
+    <argument value="8842"/>
+    <argument value="3064679"/>
+  </process>
+  <process host="cirigridwn2.univ-bpclermont.fr" function="Gate" start_time="23">
+    <argument value="33039674"/>
+    <argument value="8953"/>
+    <argument value="3100728"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="135">
+    <argument value="33039675"/>
+    <argument value="8634"/>
+    <argument value="3101037"/>
+  </process>
+  <process host="cirigridwn4.univ-bpclermont.fr" function="Gate" start_time="90">
+    <argument value="33039676"/>
+    <argument value="8858"/>
+    <argument value="3074555"/>
+  </process>
+  <process host="cirigridwn2.univ-bpclermont.fr" function="Gate" start_time="45">
+    <argument value="33039677"/>
+    <argument value="8928"/>
+    <argument value="3071548"/>
+  </process>
+  <process host="cirigridwn3.univ-bpclermont.fr" function="Gate" start_time="135">
+    <argument value="33039678"/>
+    <argument value="9155"/>
+    <argument value="3110685"/>
+  </process>
+  <process host="marwn70.in2p3.fr" function="Gate" start_time="226">
+    <argument value="33039680"/>
+    <argument value="9442"/>
+    <argument value="3096882"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="383">
+    <argument value="33039681"/>
+    <argument value="8693"/>
+    <argument value="3101786"/>
+  </process>
+  <process host="cirigridwn4.univ-bpclermont.fr" function="Gate" start_time="45">
+    <argument value="33039682"/>
+    <argument value="8899"/>
+    <argument value="3089180"/>
+  </process>
+  <process host="cirigridwn1.univ-bpclermont.fr" function="Gate" start_time="45">
+    <argument value="33039683"/>
+    <argument value="8724"/>
+    <argument value="3087663"/>
+  </process>
+  <process host="cirigridwn2.univ-bpclermont.fr" function="Gate" start_time="428">
+    <argument value="33039684"/>
+    <argument value="8656"/>
+    <argument value="3081604"/>
+  </process>
+  <process host="cirigridwn3.univ-bpclermont.fr" function="Merge" start_time="9789">
+    <argument value="33043454"/>
+    <argument value="135"/>
+    <argument value="76349628"/>
+  </process>
+</platform>

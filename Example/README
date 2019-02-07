@@ -1,0 +1,29 @@
+1) To simulate the execution of workflows, we need :
+
+   a. the platform description: we have 2 platform descriptions generated from real execution traces in this folder ("3level_scale" and "Avg_Merged_factor").
+
+   b. the workflow deployment file: they are generated in the simgrid_files/ folder of each workflow.
+
+   
+   c. the simulator.
+
+
+
+2) "laucher_generator_2.sh": generate the scripts used to launch simulation with different parametres.
+ 
+   run_simulations_workflow-XXXX.sh will be generated for each workflow by "all_launcher_generator.sh" 
+ 
+
+3) "all_execute_prestaging.sh": launch the simulation scenarios by selecting the replication algorithm
+
+
+   "all_execute_prestaging.sh dyn" means that running the simulation by using the dynamic replication algorithm implemented in our simulator. 
+   	
+   Simulation results will be stored in workflow-XXX/csv_files/ with the following format:
+
+   simulated_file_transfer_on_"platform"_"prestaginglist"_"replication_algo"_1.csv
+
+   
+   
+
+

@@ -1,0 +1,560 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd">
+<platform version="4">
+  <process host="vip.creatis.insa-lyon.fr" function="VIPServer"/>
+  <process host="bohr3226.tier2.hep.manchester.ac.uk" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-1ZGvD5.csv"/>
+  </process>
+  <process host="se03.esc.qmul.ac.uk" function="SE"/>
+  <process host="storm-se-01.ba.infn.it" function="SE"/>
+  <process host="lcgse0.shef.ac.uk" function="SE"/>
+  <process host="sbgse1.in2p3.fr" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-1ZGvD5.csv"/>
+  </process>
+  <process host="cirigridse01.univ-bpclermont.fr" function="SE"/>
+  <process host="marsedpm.in2p3.fr" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-1ZGvD5.csv"/>
+  </process>
+  <process host="gfe02.grid.hep.ph.ic.ac.uk" function="SE"/>
+  <process host="se2.ppgrid1.rhul.ac.uk" function="SE"/>
+  <process host="storm-01.roma3.infn.it" function="SE"/>
+  <process host="tbn18.nikhef.nl" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-1ZGvD5.csv"/>
+  </process>
+  <process host="hepgrid11.ph.liv.ac.uk" function="SE"/>
+  <process host="se01.marie.hellasgrid.gr" function="SE"/>
+  <process host="lpsc-se-dpm-server.in2p3.fr" function="SE"/>
+  <process host="gridsrm.pi.infn.it" function="SE"/>
+  <process host="se01.athena.hellasgrid.gr" function="SE"/>
+  <process host="srm.ciemat.es" function="SE"/>
+  <process host="gridsrm.ts.infn.it" function="SE"/>
+  <process host="se01-tic.ciemat.es" function="SE"/>
+  <process host="torik1.ulakbim.gov.tr" function="SE"/>
+  <process host="clrlcgse01.in2p3.fr" function="SE"/>
+  <process host="grid002.ics.forth.gr" function="SE"/>
+  <process host="se0.bordeaux.inra.fr" function="SE"/>
+  <process host="node12.datagrid.cea.fr" function="SE"/>
+  <process host="srm.target.rug.nl" function="SE"/>
+  <process host="se0.m3pec.u-bordeaux1.fr" function="SE"/>
+  <process host="heplnx204.pp.rl.ac.uk" function="SE"/>
+  <process host="se-dpm-server-grid.obspm.fr" function="SE"/>
+  <process host="dc2-grid-64.brunel.ac.uk" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-1ZGvD5.csv"/>
+  </process>
+  <process host="srm-biomed.gridpp.rl.ac.uk" function="SE">
+    <argument value="simgrid_files/LfcCatalog_workflow-1ZGvD5.csv"/>
+  </process>
+  <process host="ophelia.zih.tu-dresden.de" function="SE"/>
+  <process host="ccsrm02.in2p3.fr" function="DefaultSE">
+    <argument value="simgrid_files/LfcCatalog_workflow-1ZGvD5.csv"/>
+  </process>
+  <process host="lfc-biomed.in2p3.fr" function="DefaultLFC">
+    <argument value="simgrid_files/LfcCatalog_workflow-1ZGvD5.csv"/>
+  </process>
+  <process host="wn1207201.tier2.hep.manchester.ac.uk" function="Gate" start_time="23934">
+    <argument value="32913798"/>
+    <argument value="18987"/>
+    <argument value="8332520"/>
+  </process>
+  <process host="wn1206300.tier2.hep.manchester.ac.uk" function="Gate" start_time="26352">
+    <argument value="32913800"/>
+    <argument value="16579"/>
+    <argument value="8369711"/>
+  </process>
+  <process host="wn1904201.tier2.hep.manchester.ac.uk" function="Gate" start_time="25739">
+    <argument value="32913803"/>
+    <argument value="17204"/>
+    <argument value="8304963"/>
+  </process>
+  <process host="alicegrid53.ba.infn.it" function="Gate" start_time="21405">
+    <argument value="32913804"/>
+    <argument value="20548"/>
+    <argument value="8450712"/>
+  </process>
+  <process host="wn1905291.tier2.hep.manchester.ac.uk" function="Gate" start_time="25716">
+    <argument value="32913805"/>
+    <argument value="17182"/>
+    <argument value="8313694"/>
+  </process>
+  <process host="alicegrid74.ba.infn.it" function="Gate" start_time="13183">
+    <argument value="32913806"/>
+    <argument value="19602"/>
+    <argument value="8482505"/>
+  </process>
+  <process host="wn1208250.tier2.hep.manchester.ac.uk" function="Gate" start_time="24485">
+    <argument value="32913807"/>
+    <argument value="18384"/>
+    <argument value="8309174"/>
+  </process>
+  <process host="wn1208251.tier2.hep.manchester.ac.uk" function="Gate" start_time="24758">
+    <argument value="32913808"/>
+    <argument value="18083"/>
+    <argument value="8307669"/>
+  </process>
+  <process host="wn1909291.tier2.hep.manchester.ac.uk" function="Gate" start_time="27040">
+    <argument value="32913809"/>
+    <argument value="15977"/>
+    <argument value="8295714"/>
+  </process>
+  <process host="wn1206290.tier2.hep.manchester.ac.uk" function="Gate" start_time="24668">
+    <argument value="32913811"/>
+    <argument value="18384"/>
+    <argument value="8316440"/>
+  </process>
+  <process host="pccms109.ba.infn.it" function="Gate" start_time="14022">
+    <argument value="32913812"/>
+    <argument value="24109"/>
+    <argument value="8601705"/>
+  </process>
+  <process host="pccms95.ba.infn.it" function="Gate" start_time="23888">
+    <argument value="32913813"/>
+    <argument value="17548"/>
+    <argument value="8388687"/>
+  </process>
+  <process host="wn1208190.tier2.hep.manchester.ac.uk" function="Gate" start_time="22181">
+    <argument value="32913814"/>
+    <argument value="20794"/>
+    <argument value="8433985"/>
+  </process>
+  <process host="pccms97.ba.infn.it" function="Gate" start_time="13501">
+    <argument value="32913815"/>
+    <argument value="10257"/>
+    <argument value="8162462"/>
+  </process>
+  <process host="wn1905300.tier2.hep.manchester.ac.uk" function="Gate" start_time="26972">
+    <argument value="32913818"/>
+    <argument value="16278"/>
+    <argument value="8353759"/>
+  </process>
+  <process host="wn1206290.tier2.hep.manchester.ac.uk" function="Gate" start_time="17857">
+    <argument value="32913820"/>
+    <argument value="19890"/>
+    <argument value="8358694"/>
+  </process>
+  <process host="pccms84.ba.infn.it" function="Gate" start_time="22934">
+    <argument value="32913821"/>
+    <argument value="16982"/>
+    <argument value="8324338"/>
+  </process>
+  <process host="wn1206300.tier2.hep.manchester.ac.uk" function="Gate" start_time="18494">
+    <argument value="32913822"/>
+    <argument value="18718"/>
+    <argument value="8335658"/>
+  </process>
+  <process host="wn1908251.tier2.hep.manchester.ac.uk" function="Gate" start_time="23568">
+    <argument value="32913824"/>
+    <argument value="17781"/>
+    <argument value="8360286"/>
+  </process>
+  <process host="alicegrid93.ba.infn.it" function="Gate" start_time="13160">
+    <argument value="32913825"/>
+    <argument value="20299"/>
+    <argument value="8364608"/>
+  </process>
+  <process host="wn1207250.tier2.hep.manchester.ac.uk" function="Gate" start_time="26329">
+    <argument value="32913826"/>
+    <argument value="16579"/>
+    <argument value="8373626"/>
+  </process>
+  <process host="wn1909190.tier2.hep.manchester.ac.uk" function="Gate" start_time="24439">
+    <argument value="32913830"/>
+    <argument value="18387"/>
+    <argument value="8316410"/>
+  </process>
+  <process host="wn1207250.tier2.hep.manchester.ac.uk" function="Gate" start_time="22661">
+    <argument value="32913831"/>
+    <argument value="16576"/>
+    <argument value="8402051"/>
+  </process>
+  <process host="wn1207250.tier2.hep.manchester.ac.uk" function="Gate" start_time="23752">
+    <argument value="32913833"/>
+    <argument value="19289"/>
+    <argument value="8424297"/>
+  </process>
+  <process host="wizard3.ba.infn.it" function="Gate" start_time="13114">
+    <argument value="32913834"/>
+    <argument value="14565"/>
+    <argument value="8310869"/>
+  </process>
+  <process host="alicegrid57.ba.infn.it" function="Gate" start_time="21860">
+    <argument value="32913837"/>
+    <argument value="12666"/>
+    <argument value="8203393"/>
+  </process>
+  <process host="alicegrid96.ba.infn.it" function="Gate" start_time="24849">
+    <argument value="32913838"/>
+    <argument value="16284"/>
+    <argument value="8314468"/>
+  </process>
+  <process host="pccms103.ba.infn.it" function="Gate" start_time="13000">
+    <argument value="32913839"/>
+    <argument value="22603"/>
+    <argument value="8555055"/>
+  </process>
+  <process host="alicegrid53.ba.infn.it" function="Gate" start_time="14090">
+    <argument value="32913840"/>
+    <argument value="18388"/>
+    <argument value="8359167"/>
+  </process>
+  <process host="wn1208240.tier2.hep.manchester.ac.uk" function="Gate" start_time="341">
+    <argument value="32913842"/>
+    <argument value="25925"/>
+    <argument value="8647580"/>
+  </process>
+  <process host="wn1208200.tier2.hep.manchester.ac.uk" function="Gate" start_time="24302">
+    <argument value="32913843"/>
+    <argument value="18684"/>
+    <argument value="8324386"/>
+  </process>
+  <process host="wn90.hep.uk" function="Gate" start_time="37757">
+    <argument value="32913845"/>
+    <argument value="31338"/>
+    <argument value="8800863"/>
+  </process>
+  <process host="alicegrid103.ba.infn.it" function="Gate" start_time="13274">
+    <argument value="32913846"/>
+    <argument value="24714"/>
+    <argument value="8497518"/>
+  </process>
+  <process host="wn1908251.tier2.hep.manchester.ac.uk" function="Gate" start_time="24120">
+    <argument value="32913847"/>
+    <argument value="17151"/>
+    <argument value="8323764"/>
+  </process>
+  <process host="alicegrid103.ba.infn.it" function="Gate" start_time="13160">
+    <argument value="32913848"/>
+    <argument value="18093"/>
+    <argument value="8423288"/>
+  </process>
+  <process host="wn1904250.tier2.hep.manchester.ac.uk" function="Gate" start_time="23387">
+    <argument value="32913849"/>
+    <argument value="16631"/>
+    <argument value="8296421"/>
+  </process>
+  <process host="pccms95.ba.infn.it" function="Gate" start_time="13023">
+    <argument value="32913852"/>
+    <argument value="12979"/>
+    <argument value="8204644"/>
+  </process>
+  <process host="pccms124.ba.infn.it" function="Gate" start_time="13524">
+    <argument value="32913853"/>
+    <argument value="18386"/>
+    <argument value="8441385"/>
+  </process>
+  <process host="wn1206190.tier2.hep.manchester.ac.uk" function="Gate" start_time="23342">
+    <argument value="32913854"/>
+    <argument value="18686"/>
+    <argument value="8325113"/>
+  </process>
+  <process host="wn1206201.tier2.hep.manchester.ac.uk" function="Gate" start_time="23888">
+    <argument value="32913855"/>
+    <argument value="13388"/>
+    <argument value="8270755"/>
+  </process>
+  <process host="wn1206250.tier2.hep.manchester.ac.uk" function="Gate" start_time="22362">
+    <argument value="32913857"/>
+    <argument value="20492"/>
+    <argument value="8394742"/>
+  </process>
+  <process host="pccms84.ba.infn.it" function="Gate" start_time="14000">
+    <argument value="32913859"/>
+    <argument value="13878"/>
+    <argument value="8227093"/>
+  </process>
+  <process host="wn1905291.tier2.hep.manchester.ac.uk" function="Gate" start_time="24120">
+    <argument value="32913860"/>
+    <argument value="11458"/>
+    <argument value="8166036"/>
+  </process>
+  <process host="wn1206201.tier2.hep.manchester.ac.uk" function="Gate" start_time="25671">
+    <argument value="32913862"/>
+    <argument value="17182"/>
+    <argument value="8324573"/>
+  </process>
+  <process host="wn2205190.tier2.hep.manchester.ac.uk" function="Gate" start_time="23410">
+    <argument value="32913863"/>
+    <argument value="17511"/>
+    <argument value="8311314"/>
+  </process>
+  <process host="wn1905191.tier2.hep.manchester.ac.uk" function="Gate" start_time="24599">
+    <argument value="32913864"/>
+    <argument value="18383"/>
+    <argument value="8316078"/>
+  </process>
+  <process host="wn1207291.tier2.hep.manchester.ac.uk" function="Gate" start_time="23364">
+    <argument value="32913865"/>
+    <argument value="18981"/>
+    <argument value="8334846"/>
+  </process>
+  <process host="wn1905291.tier2.hep.manchester.ac.uk" function="Gate" start_time="23843">
+    <argument value="32913866"/>
+    <argument value="15162"/>
+    <argument value="8345133"/>
+  </process>
+  <process host="wn2205190.tier2.hep.manchester.ac.uk" function="Gate" start_time="25693">
+    <argument value="32913868"/>
+    <argument value="17181"/>
+    <argument value="8292727"/>
+  </process>
+  <process host="wn2206291.tier2.hep.manchester.ac.uk" function="Gate" start_time="25693">
+    <argument value="32913870"/>
+    <argument value="17181"/>
+    <argument value="8292345"/>
+  </process>
+  <process host="alicegrid57.ba.infn.it" function="Gate" start_time="21813">
+    <argument value="32913872"/>
+    <argument value="12670"/>
+    <argument value="8200070"/>
+  </process>
+  <process host="wn1208191.tier2.hep.manchester.ac.uk" function="Gate" start_time="24918">
+    <argument value="32913873"/>
+    <argument value="18081"/>
+    <argument value="8301842"/>
+  </process>
+  <process host="wn2205200.tier2.hep.manchester.ac.uk" function="Gate" start_time="24918">
+    <argument value="32913874"/>
+    <argument value="18085"/>
+    <argument value="8307446"/>
+  </process>
+  <process host="wn1207191.tier2.hep.manchester.ac.uk" function="Gate" start_time="27155">
+    <argument value="32913875"/>
+    <argument value="15673"/>
+    <argument value="8261802"/>
+  </process>
+  <process host="wn2206301.tier2.hep.manchester.ac.uk" function="Gate" start_time="23296">
+    <argument value="32913876"/>
+    <argument value="19613"/>
+    <argument value="8350170"/>
+  </process>
+  <process host="wn1206300.tier2.hep.manchester.ac.uk" function="Gate" start_time="24485">
+    <argument value="32913877"/>
+    <argument value="18687"/>
+    <argument value="8339996"/>
+  </process>
+  <process host="wn2206191.tier2.hep.manchester.ac.uk" function="Gate" start_time="24758">
+    <argument value="32913878"/>
+    <argument value="18084"/>
+    <argument value="8301792"/>
+  </process>
+  <process host="wn1208250.tier2.hep.manchester.ac.uk" function="Gate" start_time="22387">
+    <argument value="32913879"/>
+    <argument value="18722"/>
+    <argument value="8331739"/>
+  </process>
+  <process host="wn1206201.tier2.hep.manchester.ac.uk" function="Gate" start_time="24576">
+    <argument value="32913880"/>
+    <argument value="17781"/>
+    <argument value="8320757"/>
+  </process>
+  <process host="wn1207190.tier2.hep.manchester.ac.uk" function="Gate" start_time="22934">
+    <argument value="32913881"/>
+    <argument value="19892"/>
+    <argument value="8375377"/>
+  </process>
+  <process host="wn1206190.tier2.hep.manchester.ac.uk" function="Gate" start_time="25511">
+    <argument value="32913882"/>
+    <argument value="17479"/>
+    <argument value="8284642"/>
+  </process>
+  <process host="wn1910191.tier2.hep.manchester.ac.uk" function="Gate" start_time="25579">
+    <argument value="32913883"/>
+    <argument value="17482"/>
+    <argument value="8291333"/>
+  </process>
+  <process host="wn1207291.tier2.hep.manchester.ac.uk" function="Gate" start_time="25307">
+    <argument value="32913884"/>
+    <argument value="17480"/>
+    <argument value="8292839"/>
+  </process>
+  <process host="wn1904251.tier2.hep.manchester.ac.uk" function="Gate" start_time="24827">
+    <argument value="32913885"/>
+    <argument value="18119"/>
+    <argument value="8312167"/>
+  </process>
+  <process host="wn1905300.tier2.hep.manchester.ac.uk" function="Gate" start_time="24120">
+    <argument value="32913886"/>
+    <argument value="18857"/>
+    <argument value="8331005"/>
+  </process>
+  <process host="wn1909251.tier2.hep.manchester.ac.uk" function="Gate" start_time="25807">
+    <argument value="32913887"/>
+    <argument value="17180"/>
+    <argument value="8292018"/>
+  </process>
+  <process host="wn2206250.tier2.hep.manchester.ac.uk" function="Gate" start_time="23025">
+    <argument value="32913888"/>
+    <argument value="19890"/>
+    <argument value="8354327"/>
+  </process>
+  <process host="wn1205200.tier2.hep.manchester.ac.uk" function="Gate" start_time="22797">
+    <argument value="32913889"/>
+    <argument value="20191"/>
+    <argument value="8487991"/>
+  </process>
+  <process host="wn1909290.tier2.hep.manchester.ac.uk" function="Gate" start_time="26056">
+    <argument value="32913890"/>
+    <argument value="16879"/>
+    <argument value="8279955"/>
+  </process>
+  <process host="wn1206201.tier2.hep.manchester.ac.uk" function="Gate" start_time="24028">
+    <argument value="32913891"/>
+    <argument value="13210"/>
+    <argument value="8253371"/>
+  </process>
+  <process host="wn2205251.tier2.hep.manchester.ac.uk" function="Gate" start_time="23002">
+    <argument value="32913892"/>
+    <argument value="19921"/>
+    <argument value="8362006"/>
+  </process>
+  <process host="wn1205290.tier2.hep.manchester.ac.uk" function="Gate" start_time="23729">
+    <argument value="32913894"/>
+    <argument value="19283"/>
+    <argument value="8386673"/>
+  </process>
+  <process host="wn1904241.tier2.hep.manchester.ac.uk" function="Gate" start_time="23660">
+    <argument value="32913895"/>
+    <argument value="19354"/>
+    <argument value="8334057"/>
+  </process>
+  <process host="wn1904250.tier2.hep.manchester.ac.uk" function="Gate" start_time="23638">
+    <argument value="32913896"/>
+    <argument value="19283"/>
+    <argument value="8340018"/>
+  </process>
+  <process host="wn1909240.tier2.hep.manchester.ac.uk" function="Gate" start_time="27983">
+    <argument value="32913897"/>
+    <argument value="15072"/>
+    <argument value="8289626"/>
+  </process>
+  <process host="wn1905241.tier2.hep.manchester.ac.uk" function="Gate" start_time="36513">
+    <argument value="32917406"/>
+    <argument value="6338"/>
+    <argument value="8143561"/>
+  </process>
+  <process host="wn1910251.tier2.hep.manchester.ac.uk" function="Gate" start_time="36563">
+    <argument value="32917407"/>
+    <argument value="6339"/>
+    <argument value="8143497"/>
+  </process>
+  <process host="wn1910300.tier2.hep.manchester.ac.uk" function="Gate" start_time="36513">
+    <argument value="32917408"/>
+    <argument value="6342"/>
+    <argument value="8134943"/>
+  </process>
+  <process host="wn1909250.tier2.hep.manchester.ac.uk" function="Gate" start_time="36659">
+    <argument value="32917409"/>
+    <argument value="6043"/>
+    <argument value="8132048"/>
+  </process>
+  <process host="wn1908251.tier2.hep.manchester.ac.uk" function="Gate" start_time="36513">
+    <argument value="32917410"/>
+    <argument value="6184"/>
+    <argument value="8107721"/>
+  </process>
+  <process host="wn1206190.tier2.hep.manchester.ac.uk" function="Gate" start_time="42072">
+    <argument value="32917915"/>
+    <argument value="917"/>
+    <argument value="8103024"/>
+  </process>
+  <process host="wn1205250.tier2.hep.manchester.ac.uk" function="Gate" start_time="42117">
+    <argument value="32917917"/>
+    <argument value="924"/>
+    <argument value="8167329"/>
+  </process>
+  <process host="wn1207291.tier2.hep.manchester.ac.uk" function="Gate" start_time="42412">
+    <argument value="32917919"/>
+    <argument value="615"/>
+    <argument value="8138613"/>
+  </process>
+  <process host="wn1206201.tier2.hep.manchester.ac.uk" function="Gate" start_time="42457">
+    <argument value="32917928"/>
+    <argument value="314"/>
+    <argument value="8200936"/>
+  </process>
+  <process host="cn210.uk" function="Gate" start_time="74075">
+    <argument value="32921374"/>
+    <argument value="369"/>
+    <argument value="8187158"/>
+  </process>
+  <process host="cn210.uk" function="Gate" start_time="74336">
+    <argument value="32921375"/>
+    <argument value="352"/>
+    <argument value="8180757"/>
+  </process>
+  <process host="cn201.uk" function="Gate" start_time="74241">
+    <argument value="32921377"/>
+    <argument value="336"/>
+    <argument value="8097393"/>
+  </process>
+  <process host="cn204.uk" function="Gate" start_time="74168">
+    <argument value="32921378"/>
+    <argument value="323"/>
+    <argument value="8193238"/>
+  </process>
+  <process host="cn212.uk" function="Gate" start_time="74596">
+    <argument value="32921379"/>
+    <argument value="337"/>
+    <argument value="8191107"/>
+  </process>
+  <process host="cn212.uk" function="Gate" start_time="74286">
+    <argument value="32921380"/>
+    <argument value="325"/>
+    <argument value="8201057"/>
+  </process>
+  <process host="cn223.uk" function="Gate" start_time="74098">
+    <argument value="32921381"/>
+    <argument value="322"/>
+    <argument value="8198141"/>
+  </process>
+  <process host="cn206.uk" function="Gate" start_time="73959">
+    <argument value="32921382"/>
+    <argument value="410"/>
+    <argument value="8197067"/>
+  </process>
+  <process host="cn213.uk" function="Gate" start_time="74098">
+    <argument value="32921383"/>
+    <argument value="334"/>
+    <argument value="8198152"/>
+  </process>
+  <process host="cn206.uk" function="Gate" start_time="74028">
+    <argument value="32921384"/>
+    <argument value="392"/>
+    <argument value="8200667"/>
+  </process>
+  <process host="wn84.hep.uk" function="Gate" start_time="74982">
+    <argument value="32921385"/>
+    <argument value="316"/>
+    <argument value="8199953"/>
+  </process>
+  <process host="cn215.uk" function="Gate" start_time="74310">
+    <argument value="32921386"/>
+    <argument value="329"/>
+    <argument value="8194813"/>
+  </process>
+  <process host="cn214.uk" function="Gate" start_time="74336">
+    <argument value="32921387"/>
+    <argument value="455"/>
+    <argument value="6259963"/>
+  </process>
+  <process host="cn212.uk" function="Gate" start_time="74122">
+    <argument value="32921388"/>
+    <argument value="330"/>
+    <argument value="8198787"/>
+  </process>
+  <process host="cn212.uk" function="Gate" start_time="74122">
+    <argument value="32921389"/>
+    <argument value="337"/>
+    <argument value="8190584"/>
+  </process>
+  <process host="cn213.uk" function="Gate" start_time="74641">
+    <argument value="32921390"/>
+    <argument value="327"/>
+    <argument value="8201104"/>
+  </process>
+  <process host="wn2206250.tier2.hep.manchester.ac.uk" function="Merge" start_time="152835">
+    <argument value="32923147"/>
+    <argument value="786"/>
+    <argument value="7400490"/>
+  </process>
+</platform>

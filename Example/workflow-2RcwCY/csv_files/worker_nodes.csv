@@ -1,0 +1,6 @@
+Timestamp,Name,Core,MIPS,NetSpeed,SiteName,Country,CloseSE
+1443462573,cirigridwn02.univ-bpclermont.fr,48,4200.03Mf,1000Mbps,AUVERGRID,fr,cirigridse01.univ-bpclermont.fr
+1443462042,cirigridwn01.univ-bpclermont.fr,48,4200.39Mf,1000Mbps,AUVERGRID,fr,cirigridse01.univ-bpclermont.fr
+1443462019,cirigridwn04.univ-bpclermont.fr,48,4200.13Mf,1000Mbps,AUVERGRID,fr,cirigridse01.univ-bpclermont.fr
+1443462132,cirigridwn03.univ-bpclermont.fr,48,4200.31Mf,1000Mbps,AUVERGRID,fr,cirigridse01.univ-bpclermont.fr
+1443462234,marwn70.in2p3.fr,8,4987.58Mf,1000Mbps,IN2P3-CPPM,fr,marsedpm.in2p3.fr
